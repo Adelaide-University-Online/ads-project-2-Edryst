@@ -15,7 +15,8 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        // Attempt to read the file, throw error if not found.
+
+        // Attempt to read the file and handle an error if it is not found.
         try {
 
             // Create a reference to XBIT.txt and assign it to 'file'
@@ -25,11 +26,27 @@ public class Main {
             Scanner scanner = new Scanner(file);
 
             // Use the scanner to iterate over 'file' while a line with data is
-            // still beneath the current line and print the contents to the screen.
+            // still beneath the current line.
             while (scanner.hasNextLine()) {
 
+                // Assign text on each line to variable 'line'
                 String line = scanner.nextLine();
-                System.out.println(line);
+
+                // Split the line at each comma and store the results in an array.
+                String[] parts = line.split(",");
+
+                //  Assign the first element of each line to 'course'
+                String course = parts[0].trim();
+
+                System.out.println("Course: " + course);
+
+                // iterate over the remaining elements in the array
+                for (int i = 1; i < parts.length; i++) {
+                    String prerequisite = parts[i].trim();
+                    System.out.println("Prerequisite: " + prerequisite);
+                }
+
+                System.out.println("---");
             }
 
             // Close the scanner to free up system resources
