@@ -31,7 +31,10 @@ public class Main {
             ArrayList<String> allCourses = new ArrayList<>();
 
             // Create a HashMap to store each course and its list of prerequisites.
-            HashMap<String, ArrayList<String>> courseStructure = new HashMap<>();
+            HashMap<String, ArrayList<String>> courseStructureMap = new HashMap<>();
+
+            // Create a HashMap to store number of prerequisites per course.
+            HashMap<String, Integer> numOfPrerequisitesMap = new HashMap<>();
 
             // Read the first line of the file, which contains the full course list.
             String courseListLine = scanner.nextLine();
@@ -41,7 +44,11 @@ public class Main {
 
             // Iterate through each course code, remove whitespace, and add it to allCourses.
             for (String courseCode : courseCodes) {
-                allCourses.add(courseCode.trim());
+                String cleanCourseCode = courseCode.trim();
+                allCourses.add(cleanCourseCode);
+
+                // Start each course with 0 prerequisites until added to
+                numOfPrerequisitesMap.put(cleanCourseCode, 0);
             }
 
             System.out.println("All courses: " + allCourses);
@@ -76,13 +83,32 @@ public class Main {
                 }
 
                 // Store the course and its prerequisite list in the HashMap.
-                courseStructure.put(course, prerequisiteList);
+                courseStructureMap.put(course, prerequisiteList);
+
+                numOfPrerequisitesMap.put(course, prerequisiteList.size());
 
                 System.out.println("---");
             }
 
-            System.out.println("Prerequisite map:");
-            System.out.println(courseStructure);
+            System.out.println("Course Requirement Map:");
+            System.out.println(courseStructureMap);
+            System.out.println("Prerequisite Count Map:");
+            System.out.println(numOfPrerequisitesMap);
+
+            System.out.println("---");
+            System.out.println("Courses available in Study Period 1: ");
+
+            ArrayList<String> availableCourses = new ArrayList<>();
+
+            // Print the courses without any prerequisites
+            for (String course: allCourses) {
+
+                if (numOfPrerequisitesMap.get(course) == 0) {
+                    availableCourses.add(course);
+                }
+            }
+
+            System.out.println(availableCourses);
 
             // Close the scanner to free up system resources
             scanner.close();
