@@ -99,15 +99,12 @@ public class Main {
 
             // ========================= DETERMINE WHICH COURSES ARE AVAILABLE ===========================//
 
-            ArrayList<String> availableCourses = new ArrayList<>();
 
-            // Print the courses without any prerequisites
-            for (String course: allCourses) {
-
-                if (numOfPrerequisitesMap.get(course) == 0) {
-                    availableCourses.add(course);
-                }
-            }
+            ArrayList<String> availableCourses = findAvailableCourses(
+                    allCourses,
+                    numOfPrerequisitesMap,
+                    new ArrayList<>()
+            );
 
             System.out.println(availableCourses);
 
@@ -134,7 +131,6 @@ public class Main {
                                 + numOfPrerequisitesMap.get(course)
                         );
                     }
-
                 }
             }
 
@@ -143,14 +139,13 @@ public class Main {
 
             // ========================= PRINTING AVAILABLE COURSES TO OUTPUT===========================//
 
-            // Iterate through all courses and test if they have 0 prerequisites and aren't already
-            // available. If so, display them to the screen.
-            for (String course : allCourses) {
+            ArrayList<String> newlyAvailableCourses = findAvailableCourses(
+                    allCourses,
+                    numOfPrerequisitesMap,
+                    availableCourses
+            );
 
-                if (numOfPrerequisitesMap.get(course) == 0 && !availableCourses.contains(course)) {
-                    System.out.println(course);
-                }
-            }
+            System.out.println(newlyAvailableCourses);
 
 
             // Close the scanner to free up system resources
@@ -160,5 +155,31 @@ public class Main {
         } catch (FileNotFoundException e) {
             System.out.println("Could not find the file");
         }
+    }
+
+    // Takes in all courses, their number of prerequisites, and courses already available
+    // and returns all courses available but not taken yet
+    public static ArrayList<String> findAvailableCourses(
+            ArrayList<String> allCourses,
+            HashMap<String, Integer> numOfPrerequisitesMap,
+            ArrayList<String> alreadyAvailableCourses
+    ) {
+
+        ArrayList<String> availableCourses = new ArrayList<>();
+
+        // Iterate through all courses and check whether they:
+        // 1. Have 0 remaining prerequisites
+        // 2. Are not already available courses
+        for (String course : allCourses) {
+
+            if (
+                    numOfPrerequisitesMap.get(course) == 0 &&
+                            !alreadyAvailableCourses.contains(course)
+            ) {
+                availableCourses.add(course);
+            }
+        }
+
+        return availableCourses;
     }
 }
