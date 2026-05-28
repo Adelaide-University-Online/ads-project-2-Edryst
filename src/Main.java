@@ -18,6 +18,8 @@ public class Main {
 
     public static void main(String[] args) {
 
+        // ========================= FILE SET UP AND CLEANING ===========================//
+
         // Attempt to read the file and handle an error if it is not found.
         try {
 
@@ -70,24 +72,18 @@ public class Main {
                 // Create a list to store this course's prerequisites.
                 ArrayList<String> prerequisiteList = new ArrayList<>();
 
-                System.out.println("Course: " + course);
-
                 // Iterate over the remaining elements in the array.
                 for (int i = 1; i < parts.length; i++) {
 
                     // Trim whitespace and add the prerequisite to the prerequisite list.
                     String prerequisite = parts[i].trim();
                     prerequisiteList.add(prerequisite);
-
-                    System.out.println("Prerequisite: " + prerequisite);
                 }
 
                 // Store the course and its prerequisite list in the HashMap.
                 courseStructureMap.put(course, prerequisiteList);
 
                 numOfPrerequisitesMap.put(course, prerequisiteList.size());
-
-                System.out.println("---");
             }
 
             System.out.println("Course Requirement Map:");
@@ -97,6 +93,11 @@ public class Main {
 
             System.out.println("---");
             System.out.println("Courses available in Study Period 1: ");
+
+            System.out.println("---");
+            System.out.println("Simulating completion of available courses...");
+
+            // ========================= DETERMINE WHICH COURSES ARE AVAILABLE ===========================//
 
             ArrayList<String> availableCourses = new ArrayList<>();
 
@@ -109,6 +110,48 @@ public class Main {
             }
 
             System.out.println(availableCourses);
+
+            for (String completedCourse : availableCourses) {
+                System.out.println("Completed: " + completedCourse);
+
+                // Iterate through every course list for the current course.
+                for (String course : courseStructureMap.keySet()) {
+
+                    // Get the prerequisite list for the current course.
+                    ArrayList<String> prerequisiteList = courseStructureMap.get(course);
+
+                    // If the completed course exists in the prerequisite list,
+                    // reduce the prerequisite count by 1
+
+                    if (prerequisiteList.contains(completedCourse)) {
+
+                        int currentCount = numOfPrerequisitesMap.get(course);
+
+                        numOfPrerequisitesMap.put(course, currentCount - 1);
+
+                        System.out.println(
+                                course + " prerequisite count reduced to "
+                                + numOfPrerequisitesMap.get(course)
+                        );
+                    }
+
+                }
+            }
+
+            System.out.println("---");
+            System.out.println("Course newly available after Study Period 1");
+
+            // ========================= PRINTING AVAILABLE COURSES TO OUTPUT===========================//
+
+            // Iterate through all courses and test if they have 0 prerequisites and aren't already
+            // available. If so, display them to the screen.
+            for (String course : allCourses) {
+
+                if (numOfPrerequisitesMap.get(course) == 0 && !availableCourses.contains(course)) {
+                    System.out.println(course);
+                }
+            }
+
 
             // Close the scanner to free up system resources
             scanner.close();
