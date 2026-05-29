@@ -1,3 +1,13 @@
+/**
+ * File: MainTest.java
+ * Description: Test File
+ * Author: Edward Still
+ * Student ID: 3133105
+ * Email ID: a3133105@adelaide.edu.au || edward.still@student.adelaide.edu.au
+ * AI Tool Used: ChatGPT for concept explanation, assistance in debugging and code review.
+ * This is my own work as defined by the University's Academic Integrity Policy.
+ **/
+
 public class MainTest {
 
     public static void main(String[] args) {
