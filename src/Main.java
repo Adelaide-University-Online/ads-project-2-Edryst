@@ -11,8 +11,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 public class Main {
@@ -78,111 +76,12 @@ public class Main {
         // Parse in the file into DegreeParser selected by the user.
         DegreeData degreeData = DegreeParser.parseFile(scanner);
 
-        System.out.println("---");
-        System.out.println("Course Requirement Map:");
-        System.out.println(degreeData.getCourseStructureMap());
-        System.out.println("---");
-        System.out.println("Prerequisite Count Map:");
-        System.out.println(degreeData.getNumOfPrerequisitesMap());
-        System.out.println("---");
-
-        // ========================= DETERMINE WHICH COURSES ARE AVAILABLE ===========================//
-
-        // Create new List to hold completed courses
-        ArrayList<String> completedCourses = new ArrayList<>();
-
-        // Initialise study period counter and set max courses per period
-        int studyPeriod = 1;
-
-        // Loop until completed courses is equal to all courses
-        while (completedCourses.size() < degreeData.getAllCourses().size()) {
-
-            System.out.println("---");
-            System.out.println("Study Period " + studyPeriod + ": ");
-
-            ArrayList<String> availableCourses = findAvailableCourses(
-                    degreeData.getAllCourses(), // List of all courses
-                    degreeData.getNumOfPrerequisitesMap(), // Map of number of prerequisites per course
-                    completedCourses // List of courses already completed
-            );
-
-            ArrayList<String> coursesToStudyThisPeriod = new ArrayList<>();
-
-            for (int i = 0; i < availableCourses.size() && i < maxCoursesPerStudyPeriod; i++) {
-                coursesToStudyThisPeriod.add(availableCourses.get(i));
-            }
-
-            System.out.println(coursesToStudyThisPeriod);
-
-            for (String completedCourse : coursesToStudyThisPeriod) {
-                System.out.println("Completed: " + completedCourse);
-
-                completedCourses.add(completedCourse);
-
-                // Iterate through every course list for the current course.
-                for (String course : degreeData.getCourseStructureMap().keySet()) {
-
-                    // Get the prerequisite list for the current course.
-                    ArrayList<String> prerequisiteList = degreeData.getCourseStructureMap().get(course);
-
-                    // If the completed course exists in the prerequisite list,
-                    // reduce the prerequisite count by 1
-
-                    if (prerequisiteList.contains(completedCourse)) {
-
-                        int currentCount = degreeData.getNumOfPrerequisitesMap().get(course);
-
-                        degreeData.getNumOfPrerequisitesMap().put(course, currentCount - 1);
-
-                        System.out.println(
-                                course + " prerequisite count reduced to "
-                                        + degreeData.getNumOfPrerequisitesMap().get(course)
-                        );
-                    }
-                }
-            }
-            studyPeriod++;
-        }
+        CoursePlanner.generateStudyPlan(degreeData, maxCoursesPerStudyPeriod);
 
         System.out.println("---");
         System.out.println("Course newly available after Study Period");
 
-        // ========================= PRINTING AVAILABLE COURSES TO OUTPUT===========================//
-
-        ArrayList<String> newlyAvailableCourses = findAvailableCourses(
-                degreeData.getAllCourses(),
-                degreeData.getNumOfPrerequisitesMap(),
-                completedCourses
-        );
-
-        System.out.println(newlyAvailableCourses);
-
         // Close the scanner to free up system resources
         scanner.close();
-    }
-
-    // Takes in all courses, their number of prerequisites, and courses already available
-    // and returns all courses available but not taken yet
-    public static ArrayList<String> findAvailableCourses(
-            ArrayList<String> allCourses,
-            HashMap<String, Integer> numOfPrerequisitesMap,
-            ArrayList<String> alreadyAvailableCourses
-    ) {
-
-        ArrayList<String> availableCourses = new ArrayList<>();
-
-        // Iterate through all courses and check whether they:
-        // 1. Have 0 remaining prerequisites
-        // 2. Are not already available courses
-        for (String course : allCourses) {
-
-            if (
-                    numOfPrerequisitesMap.get(course) == 0 &&
-                            !alreadyAvailableCourses.contains(course)
-            ) {
-                availableCourses.add(course);
-            }
-        }
-        return availableCourses;
     }
 }
