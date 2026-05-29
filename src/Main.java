@@ -99,50 +99,72 @@ public class Main {
 
             // ========================= DETERMINE WHICH COURSES ARE AVAILABLE ===========================//
 
+            // Create new List to hold completed courses
+            ArrayList<String> completedCourses = new ArrayList<>();
 
-            ArrayList<String> availableCourses = findAvailableCourses(
-                    allCourses,
-                    numOfPrerequisitesMap,
-                    new ArrayList<>()
-            );
+            // Initialise study period counter and set max courses per period
+            int studyPeriod = 1;
+            int maxCoursesPerStudyPeriod = 3;
 
-            System.out.println(availableCourses);
+            // Loop until completed courses is equal to all courses
+            while (completedCourses.size() < allCourses.size()) {
 
-            for (String completedCourse : availableCourses) {
-                System.out.println("Completed: " + completedCourse);
+                System.out.println("---");
+                System.out.println("Study Period " + studyPeriod + ": ");
 
-                // Iterate through every course list for the current course.
-                for (String course : courseStructureMap.keySet()) {
+                ArrayList<String> availableCourses = findAvailableCourses(
+                        allCourses, // List of all courses
+                        numOfPrerequisitesMap, // Map of number of prerequisites per course
+                        completedCourses // List of courses already completed
+                );
 
-                    // Get the prerequisite list for the current course.
-                    ArrayList<String> prerequisiteList = courseStructureMap.get(course);
+                ArrayList<String> coursesToStudyThisPeriod = new ArrayList<>();
 
-                    // If the completed course exists in the prerequisite list,
-                    // reduce the prerequisite count by 1
+                for (int i = 0; i < availableCourses.size() && i <maxCoursesPerStudyPeriod; i++) {
+                    coursesToStudyThisPeriod.add(availableCourses.get(i));
+                }
 
-                    if (prerequisiteList.contains(completedCourse)) {
+                System.out.println(coursesToStudyThisPeriod);
 
-                        int currentCount = numOfPrerequisitesMap.get(course);
+                for (String completedCourse : coursesToStudyThisPeriod) {
+                    System.out.println("Completed: " + completedCourse);
 
-                        numOfPrerequisitesMap.put(course, currentCount - 1);
+                    completedCourses.add(completedCourse);
 
-                        System.out.println(
-                                course + " prerequisite count reduced to "
-                                + numOfPrerequisitesMap.get(course)
-                        );
+                    // Iterate through every course list for the current course.
+                    for (String course : courseStructureMap.keySet()) {
+
+                        // Get the prerequisite list for the current course.
+                        ArrayList<String> prerequisiteList = courseStructureMap.get(course);
+
+                        // If the completed course exists in the prerequisite list,
+                        // reduce the prerequisite count by 1
+
+                        if (prerequisiteList.contains(completedCourse)) {
+
+                            int currentCount = numOfPrerequisitesMap.get(course);
+
+                            numOfPrerequisitesMap.put(course, currentCount - 1);
+
+                            System.out.println(
+                                    course + " prerequisite count reduced to "
+                                            + numOfPrerequisitesMap.get(course)
+                            );
+                        }
                     }
                 }
+                studyPeriod++;
             }
 
             System.out.println("---");
-            System.out.println("Course newly available after Study Period 1");
+            System.out.println("Course newly available after Study Period");
 
             // ========================= PRINTING AVAILABLE COURSES TO OUTPUT===========================//
 
             ArrayList<String> newlyAvailableCourses = findAvailableCourses(
-                    allCourses,
-                    numOfPrerequisitesMap,
-                    availableCourses
+                    allCourses, // List of all courses
+                    numOfPrerequisitesMap, // Map of number of prerequisites per course
+                    completedCourses // List of courses already completed
             );
 
             System.out.println(newlyAvailableCourses);
@@ -179,7 +201,6 @@ public class Main {
                 availableCourses.add(course);
             }
         }
-
         return availableCourses;
     }
 }
