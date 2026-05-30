@@ -68,10 +68,11 @@ public class CoursePlanner {
                 coursesToStudyThisPeriod.add(availableCourses.get(i));
             }
 
-            System.out.println("Courses being studied this period: " + coursesToStudyThisPeriod);
+            for (String course : coursesToStudyThisPeriod) {
+                System.out.println("- " + course);
+            }
 
             for (String completedCourse : coursesToStudyThisPeriod) {
-                System.out.println("Completed: " + completedCourse);
 
                 completedCourses.add(completedCourse);
 
@@ -89,15 +90,15 @@ public class CoursePlanner {
                         int currentCount = degreeData.getNumOfPrerequisitesMap().get(course);
 
                         degreeData.getNumOfPrerequisitesMap().put(course, currentCount - 1);
-
-                        System.out.println(
-                                course + " prerequisite count reduced to "
-                                        + degreeData.getNumOfPrerequisitesMap().get(course)
-                        );
                     }
                 }
             }
             studyPeriod++;
         }
+
+        System.out.println();
+        System.out.println(
+                "Degree completed in " + (studyPeriod - 1) + " study periods."
+        );
     }
 }

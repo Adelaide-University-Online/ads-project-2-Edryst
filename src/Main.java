@@ -73,13 +73,13 @@ public class Main {
             }
         }
 
-        // Parse in the file into DegreeParser selected by the user.
+        // Parse in the file dictated by user into DegreeParser to clean the txt file and
+        // assign the return to a DegreeData object.
         DegreeData degreeData = DegreeParser.parseFile(scanner);
 
+        // Parse the DegreeData object and user defined number of courses per period into the CoursePlanner
+        // to define which courses should be taken in each period
         CoursePlanner.generateStudyPlan(degreeData, maxCoursesPerStudyPeriod);
-
-        System.out.println("---");
-        System.out.println("Course newly available after Study Period");
 
         // Close the scanner to free up system resources
         scanner.close();
