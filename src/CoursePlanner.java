@@ -39,6 +39,29 @@ public class CoursePlanner {
         return availableCourses;
     }
 
+    public static void updatePrerequisiteCounts(
+            DegreeData degreeData,
+            String completedCourse
+    ) {
+
+        // Iterate through every course list for the current course.
+        for (String course : degreeData.getCourseStructureMap().keySet()) {
+
+            // Get the prerequisite list for the current course.
+            ArrayList<String> prerequisiteList = degreeData.getCourseStructureMap().get(course);
+
+            // If the completed course exists in the prerequisite list,
+            // reduce the prerequisite count by 1
+
+            if (prerequisiteList.contains(completedCourse)) {
+
+                int currentCount = degreeData.getNumOfPrerequisitesMap().get(course);
+
+                degreeData.getNumOfPrerequisitesMap().put(course, currentCount - 1);
+            }
+        }
+    }
+
     public static void generateStudyPlan(
             DegreeData degreeData,
             int maxCoursesPerStudyPeriod
@@ -64,6 +87,9 @@ public class CoursePlanner {
 
             ArrayList<String> coursesToStudyThisPeriod = new ArrayList<>();
 
+            // Add courses to this study period until either:
+            // 1. No more courses are available, or
+            // 2. The maximum study load for the period is reached.
             for (int i = 0; i < availableCourses.size() && i < maxCoursesPerStudyPeriod; i++) {
                 coursesToStudyThisPeriod.add(availableCourses.get(i));
             }
@@ -72,26 +98,20 @@ public class CoursePlanner {
                 System.out.println("- " + course);
             }
 
+            // Circular dependency detection to avoid infinite looping
+            if (coursesToStudyThisPeriod.isEmpty()) {
+                System.out.println("Error: No available courses found.");
+                System.out.println("This may indicate a circular prerequisite dependency. ");
+                return;
+            }
+
+
             for (String completedCourse : coursesToStudyThisPeriod) {
 
                 completedCourses.add(completedCourse);
 
-                // Iterate through every course list for the current course.
-                for (String course : degreeData.getCourseStructureMap().keySet()) {
+                updatePrerequisiteCounts(degreeData, completedCourse);
 
-                    // Get the prerequisite list for the current course.
-                    ArrayList<String> prerequisiteList = degreeData.getCourseStructureMap().get(course);
-
-                    // If the completed course exists in the prerequisite list,
-                    // reduce the prerequisite count by 1
-
-                    if (prerequisiteList.contains(completedCourse)) {
-
-                        int currentCount = degreeData.getNumOfPrerequisitesMap().get(course);
-
-                        degreeData.getNumOfPrerequisitesMap().put(course, currentCount - 1);
-                    }
-                }
             }
             studyPeriod++;
         }
