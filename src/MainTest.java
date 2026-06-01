@@ -22,6 +22,8 @@ public class MainTest {
         testFindAvailableCourses();
         System.out.println("---");
         testPrerequisiteProgression();
+        System.out.println("---");
+        testCircularDependencyAndStandardMethods();
     }
 
     public static void testPrerequisiteCounts() {
@@ -49,9 +51,10 @@ public class MainTest {
 
         // trim whitespace
         String course = parts[0].trim();
+        String prereq = parts[1].trim();
 
         assertEqualString("INFT1032", course, "First element should be the course code");
-        assertEqualString("COMP1043", course, "First element should be the course code");
+        assertEqualString("COMP1043", prereq, "Second element should be the first prerequisite code");
     }
 
 
@@ -141,6 +144,80 @@ public class MainTest {
 
         assertEqualString("B", availableCourses.get(0), "B should become available after A");
         assertEqual(1, availableCourses.size(), "Only B should be available after A");
+    }
+
+    public static void testCircularDependencyAndStandardMethods() {
+
+        System.out.println("Running circular dependency test");
+
+        ArrayList<String> allCourses = new ArrayList<>();
+
+        allCourses.add("A");
+        allCourses.add("B");
+
+        HashMap<String, ArrayList<String>> courseStructureMap = new HashMap<>();
+
+        ArrayList<String> prerequisiteForA = new ArrayList<>();
+        prerequisiteForA.add("B");
+
+        ArrayList<String> prerequisiteForB = new ArrayList<>();
+        prerequisiteForB.add("A");
+
+        courseStructureMap.put("A", prerequisiteForA);
+        courseStructureMap.put("B", prerequisiteForB);
+
+        HashMap<String, Integer> numOfPrerequisitesMap = new HashMap<>();
+        numOfPrerequisitesMap.put("A", 1);
+        numOfPrerequisitesMap.put("B", 2);
+
+        DegreeData degreeData1 = new DegreeData(
+                allCourses,
+                courseStructureMap,
+                numOfPrerequisitesMap
+        );
+
+        ArrayList<String> completedCourses = new ArrayList<>();
+
+        ArrayList<String> availableCourses = CoursePlanner.findAvailableCourses(
+                degreeData1.getAllCourses(),
+                degreeData1.getNumOfPrerequisitesMap(),
+                completedCourses
+        );
+
+        assertEqual(0, availableCourses.size(), "No courses should be available when " +
+                "there is a circular dependency (A requires B, and vice versa)\n---");
+
+        DegreeData degreeData2 = new DegreeData(
+                allCourses,
+                courseStructureMap,
+                numOfPrerequisitesMap
+        );
+
+        ArrayList<String> allCourses2 = new ArrayList<>();
+        allCourses2.add("B");
+        allCourses2.add("C");
+
+        DegreeData degreeData3 = new DegreeData(
+                allCourses2,
+                courseStructureMap,
+                numOfPrerequisitesMap
+        );
+
+        // Test equal objects
+        System.out.println("Running DegreeData standard methods test...\n---");
+        System.out.println("Running equals test methods...");
+        if (degreeData1.equals(degreeData2)) {
+            System.out.println("PASS: Equal DegreeData objects");
+        } else {
+            System.out.println("FAIL: Equal DegreeData objects");
+        }
+
+        // Test unequal objects
+        if (degreeData1.equals(degreeData3)) {
+            System.out.println("FAIL: Equal DegreeData objects");
+        } else {
+            System.out.println("PASS: Not equal DegreeData objects");
+        }
     }
 
     public static void assertEqual (int expected, int actual, String message) {

@@ -8,8 +8,10 @@
  * This is my own work as defined by the University's Academic Integrity Policy.
  **/
 
+import java.lang.annotation.Native;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class DegreeData {
 
@@ -46,6 +48,39 @@ public class DegreeData {
 
     public HashMap<String, Integer> getNumOfPrerequisitesMap() {
         return numOfPrerequisitesMap;
+    }
+
+    // Standard Methods
+
+    @Override
+    public boolean equals(Object object) {
+
+        if (this == object) {
+            return true;
+        }
+
+        if (!(object instanceof DegreeData)) {
+            return false;
+        }
+
+        DegreeData other = (DegreeData) object;
+
+        return Objects.equals(allCourses, other.allCourses) &&
+                Objects.equals(courseStructureMap, other.courseStructureMap) &&
+                Objects.equals(numOfPrerequisitesMap, other.numOfPrerequisitesMap);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(allCourses, courseStructureMap, numOfPrerequisitesMap);
+    }
+
+    @Override
+    public String toString() {
+        return "DegreeData{" +
+                "allCourses=" + allCourses +
+                ", courseStructureMap=" + courseStructureMap +
+                ", numOfPrerequisitesMap=" + numOfPrerequisitesMap + "}";
     }
 
 }
