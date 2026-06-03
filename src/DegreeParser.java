@@ -1,6 +1,7 @@
 /**
  * File: DegreeParser.java
- * Description: Parses in course information and cleans and structures it
+ * Description: Parses in course information and cleans and structures it and
+ * returns a DegreeData object with the cleaned attributes.
  * Author: Edward Still
  * Student ID: 3133105
  * Email ID: a3133105@adelaide.edu.au || edward.still@student.adelaide.edu.au

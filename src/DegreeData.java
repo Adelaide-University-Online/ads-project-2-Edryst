@@ -1,6 +1,6 @@
 /**
  * File: DegreeData.java
- * Description: Stores course data, course structures and prerequisite information
+ * Description: Stores course data, course structures and prerequisite information.
  * Author: Edward Still
  * Student ID: 3133105
  * Email ID: a3133105@adelaide.edu.au || edward.still@student.adelaide.edu.au
@@ -8,7 +8,6 @@
  * This is my own work as defined by the University's Academic Integrity Policy.
  **/
 
-import java.lang.annotation.Native;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;

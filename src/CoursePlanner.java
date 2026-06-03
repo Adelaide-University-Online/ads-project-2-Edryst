@@ -105,7 +105,6 @@ public class CoursePlanner {
                 return;
             }
 
-
             for (String completedCourse : coursesToStudyThisPeriod) {
 
                 completedCourses.add(completedCourse);
