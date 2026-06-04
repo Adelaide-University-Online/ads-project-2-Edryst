@@ -1,6 +1,7 @@
 /**
  * File: Main.java
- * Description: Testing file reading for now
+ * Description: Takes in user input with a scanner. Parses details into DegreeParser
+ * for error handling, before generating the study plan.
  * Author: Edward Still
  * Student ID: 3133105
  * Email ID: a3133105@adelaide.edu.au || edward.still@student.adelaide.edu.au

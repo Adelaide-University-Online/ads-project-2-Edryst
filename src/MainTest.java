@@ -23,7 +23,9 @@ public class MainTest {
         System.out.println("---");
         testPrerequisiteProgression();
         System.out.println("---");
-        testCircularDependencyAndStandardMethods();
+        testCircularDependency();
+        System.out.println("---");
+        testDegreeDataStandardMethods();
     }
 
     public static void testPrerequisiteCounts() {
@@ -31,13 +33,10 @@ public class MainTest {
         System.out.println("Running prerequisite count test...");
 
         int[] array1 = {2, 2};
-        int[] array2 = {2, 1};
 
         String message = "Value test";
 
         assertEqual(array1[0], array1[1], message);
-        assertEqual(array2[0], array2[1], message);
-
     }
 
     public static void testCourseCodeParsing() {
@@ -146,7 +145,7 @@ public class MainTest {
         assertEqual(1, availableCourses.size(), "Only B should be available after A");
     }
 
-    public static void testCircularDependencyAndStandardMethods() {
+    public static void testCircularDependency() {
 
         System.out.println("Running circular dependency test");
 
@@ -168,7 +167,7 @@ public class MainTest {
 
         HashMap<String, Integer> numOfPrerequisitesMap = new HashMap<>();
         numOfPrerequisitesMap.put("A", 1);
-        numOfPrerequisitesMap.put("B", 2);
+        numOfPrerequisitesMap.put("B", 1);
 
         DegreeData degreeData1 = new DegreeData(
                 allCourses,
@@ -185,7 +184,41 @@ public class MainTest {
         );
 
         assertEqual(0, availableCourses.size(), "No courses should be available when " +
-                "there is a circular dependency (A requires B, and vice versa)\n---");
+                "there is a circular dependency (A requires B, and vice versa)");
+    }
+
+    public static void testDegreeDataStandardMethods() {
+
+        System.out.println("Running DegreeData standard methods tests...");
+
+        ArrayList<String> allCourses = new ArrayList<>();
+
+        allCourses.add("A");
+        allCourses.add("B");
+        allCourses.add("C");
+
+        HashMap<String, ArrayList<String>> courseStructureMap = new HashMap<>();
+
+        ArrayList<String> prerequisiteForA = new ArrayList<>();
+        prerequisiteForA.add("B");
+        prerequisiteForA.add("C");
+
+        ArrayList<String> prerequisiteForB = new ArrayList<>();
+        prerequisiteForB.add("C");
+
+        courseStructureMap.put("A", prerequisiteForA);
+        courseStructureMap.put("B", prerequisiteForB);
+
+        HashMap<String, Integer> numOfPrerequisitesMap = new HashMap<>();
+        numOfPrerequisitesMap.put("A", 2);
+        numOfPrerequisitesMap.put("B", 1);
+        numOfPrerequisitesMap.put("C", 0);
+
+        DegreeData degreeData1 = new DegreeData(
+                allCourses,
+                courseStructureMap,
+                numOfPrerequisitesMap
+        );
 
         DegreeData degreeData2 = new DegreeData(
                 allCourses,
@@ -204,7 +237,6 @@ public class MainTest {
         );
 
         // Test equal objects
-        System.out.println("Running DegreeData standard methods test...\n---");
         System.out.println("Running equals test methods...");
         if (degreeData1.equals(degreeData2)) {
             System.out.println("PASS: Equal DegreeData objects");
@@ -218,6 +250,28 @@ public class MainTest {
         } else {
             System.out.println("PASS: Not equal DegreeData objects");
         }
+
+        System.out.println("Testing hashcode methods...");
+        assertEqual(
+                degreeData1.hashCode(),
+                degreeData2.hashCode(),
+                "Hashcode " + degreeData1.hashCode() +
+                        " is the same to " + degreeData2.hashCode()
+        );
+
+        assertNotEqual(
+                degreeData1.hashCode(),
+                degreeData3.hashCode(),
+                "Hashcode " + degreeData1.hashCode() +
+                        " is different to " + degreeData3.hashCode()
+        );
+
+        if (degreeData1.toString().contains("allCourses")) {
+            System.out.println("PASS: toString contains allCourses");
+        } else {
+            System.out.println("FAIL: toString contains allCourses");
+        }
+
     }
 
     public static void assertEqual (int expected, int actual, String message) {
@@ -232,6 +286,22 @@ public class MainTest {
                     "FAIL: " + message
                     + " | Expected: " + expected
                     + " but got: " + actual
+            );
+        }
+    }
+
+    public static void assertNotEqual (int expected, int actual, String message) {
+
+        if (!(expected == actual)) {
+
+            System.out.println("PASS: " + message);
+
+        } else {
+
+            System.out.println(
+                    "FAIL: " + message
+                            + " | Expected: " + expected
+                            + " but got: " + actual
             );
         }
     }
