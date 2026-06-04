@@ -14,8 +14,16 @@ import java.util.HashMap;
 
 public class CoursePlanner {
 
-    // Takes in all courses, their number of prerequisites, and courses already available
-    // and returns all courses available but not completed yet
+    /**
+     * Finds all courses that currently have no remaining
+     * prerequisites and have not already been completed.
+     *
+     * @param allCourses All courses in the degree.
+     * @param numOfPrerequisitesMap Remaining prerequisite counts.
+     * @param completedCourses Courses already completed.
+     * @return List of currently available courses.
+     */
+
     public static ArrayList<String> findAvailableCourses(
             ArrayList<String> allCourses,
             HashMap<String, Integer> numOfPrerequisitesMap,
@@ -39,6 +47,15 @@ public class CoursePlanner {
         return availableCourses;
     }
 
+
+    /**
+     * Updates prerequisite counts after a course has been
+     * completed by reducing the count of dependent courses.
+     *
+     * @param degreeData Degree structure information.
+     * @param completedCourse Course that has just been completed.
+     */
+
     public static void updatePrerequisiteCounts(
             DegreeData degreeData,
             String completedCourse
@@ -61,6 +78,16 @@ public class CoursePlanner {
             }
         }
     }
+
+    /**
+     * Generates and prints a study plan using a topological
+     * sort approach while respecting the user's maximum
+     * concurrent study load.
+     *
+     * @param degreeData Degree structure information.
+     * @param maxCoursesPerStudyPeriod Maximum number of courses
+     * that may be studied at once.
+     */
 
     public static void generateStudyPlan(
             DegreeData degreeData,

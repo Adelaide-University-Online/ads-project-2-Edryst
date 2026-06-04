@@ -23,6 +23,13 @@ public class DegreeData {
     // Map each course to its number of prerequisites
     private HashMap<String, Integer> numOfPrerequisitesMap;
 
+    /**
+     * Creates a DegreeData object containing the degree structure.
+     *
+     * @param allCourses List of all courses in the degree.
+     * @param courseStructureMap Maps each course to its prerequisite courses.
+     * @param numOfPrerequisitesMap Maps each course to its number of prerequisites.
+     */
 
     // Constructor method
     public DegreeData(

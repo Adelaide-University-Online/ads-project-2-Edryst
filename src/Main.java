@@ -16,6 +16,13 @@ import java.util.InputMismatchException;
 
 public class Main {
 
+    /**
+     * Starts the application, validates user input,
+     * loads the degree file and generates a study plan.
+     *
+     * @param args Command line arguments.
+     */
+
     public static void main(String[] args) {
 
         // ========================= TAKE IN USER INPUT ===========================//

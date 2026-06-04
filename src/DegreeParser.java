@@ -15,6 +15,14 @@ import java.util.ArrayList;
 
 public class DegreeParser {
 
+    /**
+     * Reads a degree file and constructs the corresponding
+     * DegreeData object.
+     *
+     * @param scanner Scanner connected to the degree file.
+     * @return A populated DegreeData object.
+     */
+
     public static DegreeData parseFile(Scanner scanner) {
 
         // Create a list to store every course required for the degree.

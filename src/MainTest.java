@@ -11,6 +11,11 @@ import java.util.HashMap;
  * This is my own work as defined by the University's Academic Integrity Policy.
  **/
 
+/**
+ * Contains unit tests used to verify the behaviour of
+ * the OptiTime application.
+ */
+
 public class MainTest {
 
     public static void main(String[] args) {
